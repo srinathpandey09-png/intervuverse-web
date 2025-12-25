@@ -33,7 +33,7 @@ from docx import Document      # pip install python-docx
 import PyPDF2                
 import time
 import os
-from instamojo_wrapper import Instamojo
+#from instamojo_wrapper import Instamojo
 
 
 
@@ -1291,12 +1291,7 @@ def instructor_delete_lesson(lesson_id):
 
 
 
-api = Instamojo(
-    api_key=os.getenv("INSTAMOJO_API_KEY"),
-    auth_token=os.getenv("INSTAMOJO_AUTH_TOKEN"),
-    endpoint=os.getenv("INSTAMOJO_ENDPOINT")
-)
-
+api = None 
 @app.route("/skills/pay/<int:course_id>", methods=["GET", "POST"])
 @csrf.exempt
 @login_required
@@ -1320,6 +1315,7 @@ def skill_payment(course_id):
         send_email=True,
         allow_repeated_payments=False
            )
+    
 
 # 🔐 SAFETY CHECK
         if not response or "payment_request" not in response:
@@ -1330,6 +1326,8 @@ def skill_payment(course_id):
         if not pay_url:
          return "Payment URL not generated."
         return redirect(pay_url)
+        if api is None:
+         return "Payments are temporarily disabled.", 503
       
 
 
