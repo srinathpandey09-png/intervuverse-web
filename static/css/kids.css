@@ -1,0 +1,179 @@
+/* kids.css - light pastel theme limited to kids page */
+.kids-hero {
+  background: linear-gradient(180deg, #e4d982 0%, #cbc2ad 50%);
+  padding: 120px 0 60px;
+  position: relative;
+  overflow: visible;
+  
+}
+
+/* draw the background image mildly faded */
+.kids-hero::before {
+  content: "";
+  position: fixed;
+  top: 100px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  height: 850px;
+  background-image: url('/static/images/kids_bg.png');
+  background-size: cover;
+  background-position: center;
+  opacity: 0.40;
+  filter: saturate(0.95) blur(0px);
+  pointer-events: none;
+  border-radius: 13px;
+}
+
+/* inner layout */
+.kids-hero-inner {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  position: relative;
+  z-index: 3;
+}
+
+/* left */
+.kids-left { flex: 0 0 460px; }
+.kid-avatar-big {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background: linear-gradient(180deg,#ffd6a5,#ffefc2);
+  display: flex; align-items:center; justify-content:center;
+  font-size:78px; box-shadow: 0 8px 30px rgba(0, 0, 0, 0.813);
+}
+
+/* right area */
+.kids-right { flex: 1; display:flex; flex-direction:column; gap:20px; }
+
+/* cards */
+.card { background: rgba(95, 91, 91, 0.363); padding:18px; border-radius:16px; box-shadow: 0 10px 30px rgba(0,0,0,0.06); color:#15202b; }
+.kid-card { padding: 20px; }
+.blackboard { background: linear-gradient(90deg,#f6d365,#fda085); padding:10px 12px; border-radius:10px; font-weight:700; margin-top:5px; }
+.kid-field { padding:14px; margin-top:10px; border-radius:10px; background: linear-gradient(180deg,#fff,#fff); min-height:48px; font-size:16px; color:#10202b; }
+
+/* stars & stickers */
+.stars-wrap { margin-top:10px; }
+.star { display:inline-block; margin-right:6px; font-size:24px; transform: scale(0.9); transition: transform .25s; }
+.star.on { color: #ffcc33; transform: scale(1.1); text-shadow: 0 4px 12px rgba(255,204,51,0.25); }
+
+/* stickers container */
+.stickers { margin-top:55px; min-height:54px; display:flex; gap:8px; align-items:center; }
+
+/* sticker style */
+.sticker {
+  width:60px;height:60px;border-radius:12px;padding:6px;background:linear-gradient(180deg,#fff,#fff7ea);box-shadow:0 8px 20px rgba(0, 0, 0, 0.532);display:flex;align-items:center;justify-content:center;font-weight:800;
+  transform: translateY(0);
+  transition: transform .45s cubic-bezier(.2,.9,.2,1);
+}
+
+.sticker.bounce { transform: translateY(-18px) rotate(-6deg); }
+
+/* stats card */
+.stats-card { padding:16px; }
+
+/* confetti canvas */
+.confetti-canvas {
+  position: fixed; left:0; top:0; width:100%; height:100%; pointer-events:none; z-index:2000;
+}
+
+/* responsive */
+@media (max-width: 980px) {
+  .kids-hero-inner { flex-direction:column; padding: 0 24px;}
+  .kids-left { text-align:center; }
+}
+/* ---------- OPENING ANIMATIONS ONLY ---------- */
+
+/* Hero section fade + slide */
+.kids-hero {
+  animation: heroEnter 1s ease-out forwards;
+  opacity: 0;
+}
+
+@keyframes heroEnter {
+  from {
+    opacity: 0;
+    transform: translateY(-25px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Left panel pop-in */
+.kids-left {
+  animation: leftPop 1.1s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.25s;
+}
+
+@keyframes leftPop {
+  from {
+    opacity: 0;
+    transform: scale(0.92) translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateX(0);
+  }
+}
+
+/* Right content smooth rise */
+.kids-right {
+  animation: rightRise 1.2s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.4s;
+}
+
+@keyframes rightRise {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Cards gentle float-in */
+.card {
+  animation: cardFloat 1s ease-out forwards;
+  opacity: 0;
+  animation-delay: 0.6s;
+}
+
+@keyframes cardFloat {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Big avatar soft bounce */
+.kid-avatar-big {
+  animation: avatarBounce 1s cubic-bezier(.3,1.6,.4,.9) forwards;
+  opacity: 1;
+  animation-delay: 0.5s;
+}
+
+@keyframes avatarBounce {
+  0% {
+    opacity: 1;
+    transform: scale(0.6);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.08);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
