@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="home-container">
+  <h2 class="feature-headline" style="margin-top:150px;">
+    Add Lesson – {{ course.title }}
+  </h2>
+
+  <form method="post">
+    <input name="title" placeholder="Lesson Title" required>
+    <textarea name="content" placeholder="Lesson Content"></textarea>
+    <input name="video_url" placeholder="YouTube Embed URL">
+    <input name="order_no" type="number" placeholder="Order">
+
+    <button type="submit" class="btn-minimal2">Save Lesson</button>
+  </form>
+</div>
+{% endblock %}

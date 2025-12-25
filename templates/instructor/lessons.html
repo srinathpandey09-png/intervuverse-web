@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="home-container">
+<h2 class="hero-title" style="margin-top:150px;margin-bottom: 40px;" >Manage Lessons</h2>
+
+<form method="post">
+  <input name="title" placeholder="Lesson Title" required>
+  <textarea name="content" placeholder="Lesson content"></textarea>
+  <input name="video_url" placeholder="YouTube embed URL">
+  <input name="order_no" placeholder="Order">
+  <button type="submit" class="btn-minimal2">Add Lesson</button>
+</form>
+  <p style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size: 25px;color: aliceblue; margin-left: 20px;">Please Enter The Video link in the given Format : <br> https://www.youtube.com/embed/i5mYphUoOCs</p>
+
+<hr>
+
+{% for l in lessons %}
+  <div class="hover-box">
+    <h3>{{ l.order_no }}. {{ l.title }}</h3>
+
+    {% if l.video_url %}
+      <p>🎥 <a href="{{ l.video_url }}" target="_blank" style="color: aliceblue;">Watch Video</a></p>
+    {% endif %}
+
+    <p>{{ l.content }}</p>
+
+     <a href="/instructor/lesson/delete/{{ l.id }}" class="btn-minimal2" style="color: aliceblue;border: 2px solid; margin-top: 10px;" onclick="return confirm('Delete this lesson?')">🗑 Delete</a>
+   
+  </div>
+{% endfor %}
+
+</div>
+
+{% endblock %}
