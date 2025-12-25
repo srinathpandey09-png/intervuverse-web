@@ -25,7 +25,7 @@ Werkzeug==3.0.1
 # Environment & Security
 # -------------------------------
 python-dotenv==1.0.1
-secrets==1.0.0
+
 
 # -------------------------------
 # Database
