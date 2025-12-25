@@ -1,0 +1,23 @@
+<h2>🔑 User API Keys</h2>
+
+<table class="admin-table">
+  <tr>
+    <th>User</th>
+    <th>Email</th>
+    <th>Key (masked)</th>
+    <th>Action</th>
+  </tr>
+
+  {% for k in keys %}
+  <tr>
+    <td>{{ k.name }}</td>
+    <td>{{ k.email }}</td>
+    <td>••••••••{{ k.api_key[-4:] }}</td>
+    <td>
+      <form method="post" action="/admin/disable_key/{{ k.id }}">
+        <button  type="submit" class="danger">Disable</button>
+      </form>
+    </td>
+  </tr>
+  {% endfor %}
+</table>

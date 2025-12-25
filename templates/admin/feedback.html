@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin – Feedback</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<div class="feedback">
+  <div class="feedback-container">
+<body class="admin-page">
+
+<h2 style="margin:20px 0;margin-bottom: 50px;font-size: clamp(48px, 6vw, 92px);font-weight: 700;line-height: 1.05;color: #ffffff;letter-spacing: -3px; z-index: 2;">💬 User Feedback</h2>
+
+<div class="admin-container">
+
+  {% for f in rows %}
+  <div class="feedback-box">
+    <p><b>User:</b> {{ f.name or "Unknown" }}</p>
+    <p><b>Message:</b> {{ f.message }}</p>
+    <form method="post" action="/admin/feedback/feature/{{ f.id }}">
+  <button type="submit">
+    {% if f.featured %}Unfeature{% else %}⭐ Feature{% endif %}
+  </button>
+</form>
+
+
+    {% if f.reply %}
+      <p class="reply">🟢 Admin Reply: {{ f.reply }}</p>
+    {% else %}
+      <form method="post" action="/admin/feedback/reply/{{ f.id }}">
+        <textarea name="reply" required placeholder="Write reply..."></textarea>
+        <button type="submit">Send Reply</button>
+      </form>
+    {% endif %}
+  </div>
+  {% endfor %}
+
+</div>
+
+<a href="/admin/dashboard" class="admin-card" style="margin:20px;">⬅ Back</a>
+
+</body>
+</html>

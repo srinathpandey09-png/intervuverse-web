@@ -1,0 +1,42 @@
+
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  <title>Admin Dashboard – IntervuVerse</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body >
+
+<div class="home-page1">
+  
+<div class="home1-container">
+<section class="hero-minimal">
+  
+  <div class="container-minimal hero-content centered subtle-fade">
+    <h1 class="hero-title" style="margin-top: 0px;" >IntervuVerse Control Panel</h1>
+  <div class="cta-group">
+     <a href="/admin/users" class="btn-minimal3 module-color-dark">®️ Registered Users</a>
+     <a href="/admin/database" class="btn-minimal3 module-color-dark">🗄 Manage Database</a>
+    <a href="/admin/feedback" class="btn-minimal3 module-color-dark">💬 Feedback & Replies</a>
+    <a href="/admin/api-keys" class="btn-minimal3 module-color-dark">🔑 API Keys</a>
+    <a href="/admin/announcements"class="btn-minimal3 module-color-dark">📢 Announcements</a>
+    <a href="/admin/skills/courses" class="btn-minimal3 module-color-dark">📚 Skill Courses</a>
+    <a href="/admin/skills/instructors" class="btn-minimal3 module-color-dark">👨‍🏫 Instructors</a>
+    <a href="/" class="btn-minimal3 module-color-dark">Back To Home</a>
+    <a href="/logout" class="admin-card danger">🚪 Logout</a>
+  </div>
+  </div>
+  </section>
+  
+  
+</div>
+
+
+</body>
+</html>
+{% endblock %}

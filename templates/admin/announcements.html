@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin – Announcements</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body  class="announcement1-container">
+<h2 style="margin-bottom: 50px;font-size: clamp(48px, 6vw, 92px);font-weight: 700;line-height: 1.05;color: #ffffff;letter-spacing: -3px; z-index: 2;" >📢 Global Announcements</h2>
+<div class="announcement1" style="margin-bottom: 50px;">
+  
+
+  <form method="post" class="announcement-form">
+    <input type="text" name="title" placeholder="Announcement Title" required style="margin-left: 30px;">
+    <textarea name="message" placeholder="Write announcement..." required style="margin-left: 30px;"></textarea>
+    <button type="submit" class="btn-minimal btn-primary-minimal btn-large" style="margin: 50px;"  >Publish</button>
+  </form>
+
+<a href="/admin/dashboard" class="admin-card"  style="margin: 50px; margin-top: 30px;margin-bottom: 50px;">⬅ Back</a>
+
+
+  {% for a in announcements %}
+    <div class="announcement-box" style="margin-top: 30px;">
+      <h3>{{ a.title }}</h3>
+      <p>{{ a.message }}</p>
+      
+    </div>
+  {% endfor %}
+
+  
+</div>
+</body>
+</html>

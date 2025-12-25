@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin – Table View</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="admin-page">
+
+<div class="admin-container">
+  <h2>📋 Table: {{ table }}</h2>
+
+  <table class="admin-table">
+    <tr>
+      {% for col in columns %}
+        <th>{{ col }}</th>
+      {% endfor %}
+      <th>Action</th>
+    </tr>
+
+    {% for row in rows %}
+    <tr>
+      {% for col in columns %}
+        <td>{{ row[col] }}</td>
+      {% endfor %}
+      <td>
+        {% if 'id' in columns %}
+        <form method="post" action="/admin/delete/{{ table }}/{{ row['id'] }}"
+              onsubmit="return confirm('Delete this row?');">
+          <button type="submit" class="admin-btn danger">Delete</button>
+        </form>
+        {% else %}
+        —
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </table>
+
+  <a href="/admin/database" class="admin-card">⬅ Back</a>
+</div>
+
+</body>
+</html>

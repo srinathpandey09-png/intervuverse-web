@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin – {{ table }}</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<a href="/admin/dashboard" class="admin-card">⬅ Back</a>
+
+<body class="admin-page">
+<div class="admin-container">
+
+<h2>📊 Table: {{ table }}</h2>
+
+<table class="admin-table">
+  <tr>
+    {% for col in columns %}
+      <th>{{ col }}</th>
+    {% endfor %}
+    <th>Action</th>
+  </tr>
+
+  {% for row in rows %}
+  <tr>
+    {% for col in columns %}
+      <td>{{ row[col] }}</td>
+    {% endfor %}
+    <td>
+      {% if 'id' in columns %}
+      <form method="POST" action="/admin/delete/{{ table }}/{{ row['id'] }}">
+        <button type="submit" class="admin-danger">❌ Delete</button>
+      </form>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</table>
+
+<ul>
+    
+    <li>
+        <a href="{{ table }}" class="button-link">📄 {{ table }}</a>
+    </li>
+    
+</ul>
+
+</div>
+
+</body>
+</html>

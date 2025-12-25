@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin – Manage Database</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head >
+<div class="database">
+  <div class="database-container">
+<body class="admin-page">
+    <a href="/admin/dashboard" class="admin-card">⬅ Back</a>
+<h2 style="margin-top: 25px;margin:20px 0;margin-bottom: 50px;font-size: clamp(48px, 6vw, 92px);font-weight: 700;line-height: 1.05;color: #ffffff;letter-spacing: -3px; z-index: 2;">🗄 Manage Database</h2>
+<div >
+  
+
+<ul style="margin: 20px;">
+  {% for t in tables %}
+  <td >{{ t }}</td>
+    <tr>
+      <td>
+        <li>
+        <a href="/admin/table/{{ t }}" class="admin-btn" style="color: aliceblue;">View</a>
+        </li>
+      </td>
+    </tr>
+    {% endfor %}
+</ul>
+
+  
+</div>
+
+</body>
+</html>
