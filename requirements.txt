@@ -1,0 +1,66 @@
+Flask>=2.0
+gunicorn
+python-dotenv
+Flask-Login
+Flask-WTF
+itsdangerous
+reportlab
+matplotlib
+python-multipart
+# -------------------------------
+# Core Web Framework
+# -------------------------------
+Flask==3.0.0
+gunicorn==21.2.0
+
+# -------------------------------
+# Flask Extensions
+# -------------------------------
+Flask-WTF==1.2.1
+WTForms==3.1.2
+itsdangerous==2.1.2
+Werkzeug==3.0.1
+
+# -------------------------------
+# Environment & Security
+# -------------------------------
+python-dotenv==1.0.1
+secrets==1.0.0
+
+# -------------------------------
+# Database
+# -------------------------------
+# sqlite3 is built-in (no install needed)
+
+# -------------------------------
+# Google Gemini AI
+# -------------------------------
+google-generativeai==0.5.4
+
+# -------------------------------
+# File Handling & Uploads
+# -------------------------------
+python-multipart==0.0.9
+
+# -------------------------------
+# PDF / Certificate Generation
+# -------------------------------
+reportlab==4.1.0
+Pillow==10.2.0
+PyPDF2==3.0.1
+python-docx==1.1.0
+
+# -------------------------------
+# Charts & Analytics
+# -------------------------------
+matplotlib==3.8.2
+
+# -------------------------------
+# Payment Gateway
+# -------------------------------
+instamojo-wrapper==1.2
+
+# -------------------------------
+# Utility
+# -------------------------------
+requests==2.31.0
