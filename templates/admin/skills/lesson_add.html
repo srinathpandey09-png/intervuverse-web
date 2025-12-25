@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Add Lesson</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="admin-page">
+<h2 style="margin-bottom: 50px;" class="hero-title">Add Lesson</h2>
+<a href="/admin/skills/course/{{ course_id }}/lessons" class="admin-card">
+    ⬅ Back
+  </a>
+<div class="admin-container" style="margin-top: 30px;">
+  
+
+  <form method="post">
+    <input type="text" name="title" placeholder="Lesson title" required>
+
+    <textarea name="content" placeholder="Lesson content" rows="6"></textarea>
+
+    <input type="url" name="video_url" placeholder="YouTube / Drive video link">
+
+    <input type="number" name="order_no" placeholder="Lesson order" value="1">
+
+    <button type="submit">Save Lesson</button>
+  </form>
+
+  
+</div>
+
+</body>
+</html>

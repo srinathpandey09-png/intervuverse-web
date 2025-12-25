@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Manage Lessons</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="admin-page">
+<h2 style="margin-bottom: 50px;" class="hero-title">Lessons – {{ course.title }}</h2>
+
+  <a href="/admin/skills/courses" class="admin-card">⬅ Back</a>
+  <a href="/admin/skills/course/{{ course.id }}/lesson/add"
+     class="admin-card">
+     ➕ Add New Lesson
+  </a>
+
+
+<div class="admin-container" style="margin-top: 30px;">
+  
+  {% for l in lessons %}
+    <div class="admin-card">
+      <h3>{{ l.order_no }}. {{ l.title }}</h3>
+
+      {% if l.video_url %}
+        <p>🎥 <a href="{{ l.video_url }}" target="_blank">Watch Video</a></p>
+        <a href="/admin/skills/lesson/delete/{{ l.id }}">🗑 Delete</a>
+      {% endif %}
+        <p style="font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;font-size: 25px;color: aliceblue; margin-left: 20px;">Please Enter The Video link in the given Format <br> https://www.youtube.com/embed/i5mYphUoOCs</p>
+
+      <p>{{ l.content[:200] }}...</p>
+    </div>
+  {% else %}
+    <p>No lessons added yet.</p>
+  {% endfor %}
+</div>
+
+</body>
+</html>

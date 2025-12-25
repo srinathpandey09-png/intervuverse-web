@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Admin – Instructors</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="admin-page">
+  <h2 style="margin-top: 20px;margin-bottom: 50px;" class="hero-title"> Instructors</h2>
+  <a href="/admin/dashboard" class="admin-card">⬅ Back</a>
+
+<div class="admin-container" style="margin-top: 50px;">
+  
+
+  <form method="post" action="/admin/skills/instructors/add" enctype="multipart/form-data">
+    <input name="name" placeholder="Instructor Name" required>
+    <select name="user_id" required>
+      <option value="">-- Select User Account --</option>
+      {% for u in users %}
+       <option value="{{ u.id }}">{{ u.name }} ({{ u.email }})</option>
+      {% endfor %}
+      </select>
+    <input name="expertise" placeholder="Expertise (Public Speaking, AI, etc)">
+    <input name="linkedin" placeholder="LinkedIn URL">
+    <textarea name="bio" placeholder="Short bio"></textarea>
+    <input type="file" name="photo">
+    <button type="submit">Add Instructor</button>
+  </form>
+
+  <table class="admin-table">
+    <tr>
+      <th>ID</th><th>Name</th><th>Expertise</th><th>Bio</th><th>LinkedIn</th><th>Assign Course</th><th>Actions</th>
+    </tr>
+    {% for i in instructors %}
+    <tr>
+      <td>{{ i.id }}</td>
+      <td>{{ i.name }}</td>
+      <td>{{ i.expertise }}</td>
+      <td>{{ i.bio }}</td>
+      <td>{{ i.linkedin }}</td>
+      <td >
+    <form method="post" action="/admin/skills/assign_course" >
+      
+      <!-- Instructor ID -->
+      <input type="hidden" name="instructor_id" value="{{ i.id }}">
+
+      <!-- Course Dropdown -->
+      <select name="course_id" required>
+        <option value="">-- Assign Course --</option>
+        {% for c in courses %}
+          <option value="{{ c.id }}">{{ c.title }}</option>
+        {% endfor %}
+      </select>
+
+      <button type="submit" >
+        Assign Course
+      </button>
+    </form>
+  </td>
+  <td>
+        <form method="post" action="/admin/delete/instructors/{{ i.id }}">
+          <button type="submit" class="danger">Delete</button>
+        </form>
+      </td>
+    </tr>
+    
+
+    {% endfor %}
+  </table>
+
+</div>
+</body>
+</html>

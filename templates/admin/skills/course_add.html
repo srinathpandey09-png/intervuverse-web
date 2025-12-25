@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Add Skill Course</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+
+<body class="admin-page">
+
+<h2 class="hero-title" style="margin-bottom:50px;">➕ Add Skill Course</h2>
+
+<a href="/admin/skills/courses" class="admin-card">⬅ Back</a>
+
+<div class="admin-container" style="margin-top:30px;">
+
+  <form method="post">
+
+    <input type="text" name="title" placeholder="Course Title" required>
+
+    <textarea name="description" placeholder="Course Description" rows="5"></textarea>
+
+    <select name="level">
+      <option value="Beginner">Beginner</option>
+      <option value="Intermediate">Intermediate</option>
+      <option value="Advanced">Advanced</option>
+    </select>
+
+    <label style="color:white;">
+      <input type="checkbox" name="is_paid"> Paid Course
+    </label>
+
+    <input type="number" name="price" placeholder="Price (₹)" min="0">
+
+    <select name="instructor_id">
+      <option value="">-- Assign Instructor (Optional) --</option>
+      {% for i in instructors %}
+        <option value="{{ i.id }}">{{ i.name }}</option>
+      {% endfor %}
+    </select>
+
+    <button type="submit">Save Course</button>
+
+  </form>
+
+</div>
+
+</body>
+</html>

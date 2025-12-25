@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Manage Skill Courses</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="admin-page">
+<h2 style="margin-bottom: 50px;" class="hero-title">Skill Development Courses</h2>
+
+  <a href="/admin/dashboard" class="admin-card">⬅ Back</a>
+  <a href="/admin/skills/course/add" class="admin-card">➕ Add New Course</a>
+  
+<div class="admin-container" style="margin-top: 30px;">
+  
+  
+
+  {% for c in courses %}
+    <div class="admin-card">
+      <h3>{{ c.title }}</h3>
+      <p>{{ c.description }}</p>
+      <p><b>Instructor:</b> {{ c.instructor_name or "Not assigned" }}</p>
+      <a href="/admin/skills/course/{{ c.id }}/lessons" class="btn-minimal">
+        📚 Manage Lessons
+      </a>
+      <form method="post" action="/admin/skills/course/delete/{{ c.id }}">
+  <button class="danger" type="submit">🗑 Delete Course</button>
+</form>
+    </div>
+  {% endfor %}
+</div>
+
+</body>
+</html>
