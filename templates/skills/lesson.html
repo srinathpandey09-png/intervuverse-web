@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="home-container">
+<h2 style="margin-top: 150px;" class="feature-headline">{{ lesson.title }}</h2>
+
+{% if lesson.video_url %}
+<div style="margin: 30px 0;">
+  <iframe
+    width="100%"
+    height="420"
+    src="{{ lesson.video_url }}"
+    frameborder="0"
+    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+    allowfullscreen>
+  </iframe>
+</div>
+{% endif %}
+
+
+<p class="feature-description">{{ lesson.content }}</p>
+
+{% if not lesson.completed %}
+<form method="post" action="/skills/lesson/complete/{{ lesson.id }}">
+  <button type="submit" class="btn-minimal2"
+    style="border: 1px solid #b58e2d9a;border-radius: 15px;margin-top: 10px;">
+    Mark as Completed
+  </button>
+</form>
+{% else %}
+<p class="badge-success" style="margin-left:20px;">✅ Lesson Completed</p>
+{% endif %}
+
+</div>
+{% endblock %}

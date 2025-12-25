@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="feature-headline" style="margin-top: 150px;">Complete Payment</h2>
+<p style="text-align: center;">Course: <b>{{ course.title }}</b></p>
+<p style="text-align: center;">Amount: ₹{{ course.price }}</p>
+<div class="home-container" style="margin-top: 20px; margin-bottom: 50px;place-items: center;">
+  <div class="cta-group">
+        <a class="btn-minimal btn-primary-minimal" href="/">Back to home</a>
+</div>
+<form method="post">
+  <div class="input-group" style="place-items: center;">
+  <input required name="full_name" placeholder="Full Name " style="padding: 20px; margin-bottom: 20px;">
+  <input required name="email" placeholder="Email" style="padding: 20px; margin-bottom: 20px;">
+  <textarea name="purpose" placeholder="Why are you taking this course?"style="padding: 20px;margin-bottom: 20px;"></textarea>
+  <input required name="certificate_name" placeholder="Name For Certificate" style="padding: 20px;margin-bottom: 20px;">
+
+  <button type="submit" class="btn-minimal2" style="padding: 20px;">Proceed to Pay</button>
+  
+  </div>
+</form>
+
+</div>
+<style>
+  .input-group {
+    position: relative;
+    margin-top: 40px;
+    width: 300px; 
+  }
+
+  /* Modern input styling */
+  input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  input:focus {
+    border-color: #007bff; /* Highlight color */
+  }
+
+  /* Styling the floating label */
+  label {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #999;
+    pointer-events: none;
+    transition: all 0.3s ease;
+  }
+
+  /* Animate label up when focused or when text is entered */
+  input:focus + label,
+  input:not(:placeholder-shown) + label {
+    top: -10px;
+    left: 8px;
+    font-size: 12px;
+    color: #007bff;
+    background-color: white; /* Covers the border */
+    padding: 0 4px;
+  }
+</style>
+{% endblock %}

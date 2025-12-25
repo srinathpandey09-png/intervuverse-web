@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Certificate</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="skills-page">
+
+<div class="skills-container certificate-box">
+  <h1>🎓 Certificate of Completion</h1>
+
+  <p>This certifies that</p>
+  <h2>{{ g.user.name }}</h2>
+
+  <p>has successfully completed the course</p>
+
+  <h3>Course ID: {{ cert.course_id }}</h3>
+
+  <p>Certificate Code: <b>{{ cert.certificate_code }}</b></p>
+  <p>Date: {{ cert.issued_at | int | datetime }}</p>
+
+  <button onclick="window.print()">Download PDF</button>
+</div>
+
+</body>
+</html>

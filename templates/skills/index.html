@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="home-container">
+  
+<h2 style="margin-top: 150px;margin-bottom: 50px;" class="hero-title">🎓 Skill Development Programs</h2>
+<div class="cta-group">
+        <a class="btn-minimal btn-primary-minimal" href="/">Back to home</a>
+</div>
+<div class="grid" style="margin-top: 50px;margin-bottom: 50px;">
+{% for c in courses %}
+
+<div class="hover-box" >
+  {% if  c.enrolled %}
+<span class="verified" style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; font-size: 30px; ">✔ Enrolled</span>
+{% endif %}
+  <h3 class="feature-headline">{{ c.title }}</h3>
+  <p class="feature-description" >{{ c.description }}</p>
+  <p class="feature-description"><b>Level:</b> {{ c.level }}</p>
+  <p class="feature-description">
+  👩‍🏫 <b>Instructor:</b> {{ c.instructor_name or "TBA" }}
+  </p>
+  <p class="feature-description" >
+    {% if c.is_paid %}
+      💰 ₹{{ c.price }}
+    {% else %}
+      ✅ Free
+    {% endif %}
+  </p>
+  <a href="/skills/course/{{ c.id }}" class="btn-minimal3" style="border: 1px solid #f8bf2fc2;border-radius: 15px;margin-top: 10px">View Course</a>
+</div>
+{% endfor %}
+</div>
+</div>
+
+{% endblock %}

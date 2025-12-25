@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="home-container">
+<h2>📊 Your Course Progress</h2>
+
+{% for c in courses %}
+<p>
+{{ c.title }} — {{ c.completed }}/{{ c.total }} lessons
+</p>
+{% endfor %}
+</div>
+{% endblock %}

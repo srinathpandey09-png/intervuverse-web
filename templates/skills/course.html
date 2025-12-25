@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="home-container" style="place-items: center;">
+<h2 style="margin-top: 150px;margin-bottom: 50px;" class="feature-headline" >{{ course.title }}</h2>
+<p class="feature-description">{{ course.description }}</p>
+<div style="place-items: center;">
+{% if not enrolled %}
+  <a href="/skills/enroll/{{ course.id }}" class="btn-minimal2" style="border: white solid; color:  aliceblue;">
+    {% if course.is_paid %}Enroll & Pay{% else %}Enroll{% endif %}
+  </a>
+{% endif %}
+</div>
+
+<div class="hover-box">
+  <h3>👩‍🏫 Instructor Details</h3>
+
+  {% if course.name %}
+    <p><b>Name:</b> {{ course.name }}</p>
+    <p><b>Expertise:</b> {{ course.expertise }}</p>
+    <p><b>Bio:</b> {{ course.bio }}</p>
+
+    {% if course.linkedin %}
+      <p>
+        🔗 <a href="{{ course.linkedin }}" target="_blank" style="color:#ffd700">
+          LinkedIn Profile
+        </a>
+      </p>
+    {% endif %}
+  {% else %}
+    <p>Instructor will be announced soon...</p>
+  {% endif %}
+</div>
+
+
+<h3 class="hero-subtitle" >📚 Lessons</h3>
+
+{% if enrolled %}
+  <ul>
+    {% for l in lessons %}
+      <li style="margin-bottom: 20px;">
+        <a href="/skills/lesson/{{ l.id }}" style="color:aliceblue;font-size:26px;">
+          {{ l.title }}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p style="font-size:22px;color:#ffcc00; margin-bottom: 25px;">
+    🔒 Please enroll to unlock lessons.
+  </p>
+{% endif %}
+
+</div>
+
+</div>
+{% endblock %}
