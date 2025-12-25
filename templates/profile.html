@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+
+
+<div class="profile-wrapper subtle-fade">
+
+  <div class="profile-card" style="margin-top: 100px;">
+
+    <!-- Profile Photo Preview -->
+    <div class="profile-photo-section">
+      {% if user.photo %}
+      <img id="photoPreview" src="{{ user.photo }}" class="profile-photo">
+      {% else %}
+      <img id="photoPreview" src="/static/images/default_avatar.png" class="profile-photo">
+      {% endif %}
+
+      <label class="upload-btn">
+        Change Photo
+        <input type="file" name="photo" id="photoInput" accept="image/*" form="profileForm">
+      </label>
+    </div>
+
+    <!-- Form -->
+    <form id="profileForm"
+      enctype="multipart/form-data"
+      method="post"
+      action="/api/update_profile"
+      class="profile-form">
+
+       {{ csrf_token() }}
+
+    <h2 class="profile-title">Edit Your Profile</h2>
+
+
+      <div class="form-group">
+        <label>Full Name</label>
+        <input name="name" class="form-input" value="{{ user.name }}">
+      </div>
+
+      <div class="form-group">
+        <label>Email</label>
+        <input class="form-input" value="{{ user.email }}" readonly>
+      </div>
+
+      <div class="form-group">
+        <label>Role (Student / Aspirant / Professional)</label>
+        <input name="role" class="form-input"  value="{{ user.role }}"  >
+      </div>
+
+      <div class="form-group">
+        <label>School / Organisation</label>
+        <input name="school" class="form-input" value="{{ user.school }}">
+      </div>
+
+      <div class="form-row">
+        <div class="form-group half">
+          <label>Class / Grade /Rank</label>
+          <input name="class" class="form-input" value="{{ user.class }}">
+        </div>
+        <div class="form-group half">
+          <label>Profession/Work Field</label>
+          <input name="profession" class="form-input" value="{{ user.profession }}">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Address</label>
+        <textarea name="address" class="form-textarea">{{ user.address }}</textarea>
+      </div>
+
+      <div class="btn-group">
+        <button type="submit" class="btn-save">Save Profile</button>
+        <a href="/dashboard" class="btn-cancel">Cancel</a>
+      </div>
+    </form>
+  </div>
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Live Photo Preview
+document.getElementById("photoInput").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const preview = document.getElementById("photoPreview");
+        preview.src = URL.createObjectURL(file);
+    }
+});
+</script>
+{% endblock %}

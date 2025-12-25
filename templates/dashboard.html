@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+
+
+
+<!doctype html>
+<html lang="en">
+  <div class="dashboard-page">
+  <div class="dashboard-container">
+<head meta charset="utf-8"><title>Dashboard</title><link rel="stylesheet" href="/static/css/style.css"></head>
+<body>
+  <div class="container-minimal page-header">
+    <h1 class="page-title">Progress Dashboard</h1>
+    <div class="stats-grid">
+      <div class="stat-card-minimal"><div class="stat-number">{{ avg_score }}%</div><div class="stat-label">Average Score</div></div>
+      <div class="stat-card-minimal"><div class="stat-number">{{ sessions }}</div><div class="stat-label">Sessions</div></div>
+      <div class="stat-card-minimal"><div class="stat-number">{{ badges|length }}</div><div class="stat-label">Badges</div></div>
+    </div>
+    <div style="margin-top:24px">
+      <a class="btn-minimal btn-primary-minimal" href="/">Back to Home</a>
+      <a class="btn-minimal btn-secondary-minimal" href="/leaderboard">Leaderboard</a>
+    </div>
+  </div>
+</body>
+</div>
+</div>
+</html>
+
+{% endblock %}

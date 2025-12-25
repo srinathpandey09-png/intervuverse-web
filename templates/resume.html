@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+{% block title %}AI Resume Analyzer{% endblock %}
+
+{% block content %}
+
+
+<div class="resume-page">
+  <div class="resume-container">
+<section class="hero-minimal page-hero centered subtle-fade">
+  <div class="container-minimal hero-content">
+    <div>
+      <div class="mode-pill">Resume / CV Analyzer</div>
+      <h1 class="hero-title"> Resume & ATS Analyzer</h1>
+      <p class="hero-subtitle">
+        Upload your resume (PDF / DOCX / TXT) and let IntervuVerse + Gemini
+        analyse it like a real recruiter & ATS system – with scores, strengths,
+        and improvement tips.
+      </p>
+      <p class="hero-subtitle"> Scroll Down and start the analysis Now!</p>
+    </div>
+    <div class="cta-group">
+        <a class="btn-minimal btn-primary-minimal" href="/">Back to home</a>
+</div>
+  </div>
+</section>
+
+<div class="container-minimal card-animated"
+     style="margin-top:18px; display:grid; grid-template-columns:minmax(0,1.4fr) minmax(260px,0.9fr); gap:20px; align-items:flex-start;">
+
+  <!-- LEFT: Upload + Results -->
+  <div>
+    <div class="form-row-minimal" style="gap:10px; flex-wrap:wrap; display:flex;">
+      <div style="flex:1; min-width:230px;">
+        <label class="small-label">Upload Resume (PDF / DOCX / TXT)</label>
+        <input id="resumeFile" name="resume" type="file"
+               accept=".pdf,.docx,.txt,.md"
+               class="form-input-minimal">
+      </div>
+
+      <div style="min-width:220px; flex:1;">
+        <label class="small-label">Target Role / Post (optional)</label>
+        <input id="resumeRole" class="form-input-minimal"
+               placeholder="e.g. Software Engineer, IAS Aspirant, Marketing Intern">
+      </div>
+
+      <div style="min-width:180px;">
+        <label class="small-label">Analysis Mode</label>
+        <select id="resumeMode" class="form-select-minimal">
+          <option value="general" selected>General Quality</option>
+          <option value="campus">Campus Placement</option>
+          <option value="job">Experienced Job</option>
+          <option value="ats">Pure ATS Focus</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
+      <button id="resumeAnalyzeBtn" class="btn-minimal btn-primary-minimal btn-large">
+        Analyze Resume
+      </button>
+      <button id="resumeDownloadBtn" class="btn-minimal btn-secondary-minimal" disabled>
+        Download AI Resume Report (PDF)
+      </button>
+
+      <div id="resumeStatus" style="margin-left:auto; font-size:13px; color:#9fb3ff;">
+        Waiting for upload...
+      </div>
+    </div>
+
+    <hr style="margin:18px 0">
+
+    <!-- Scores -->
+    <div id="resumeScoresCard"
+         style="display:none; padding:12px; border-radius:12px; background:rgba(15,23,42,0.9); box-shadow:0 14px 35px rgba(0,0,0,0.55);">
+      <h3 style="margin-top:0;">AI Score Summary</h3>
+      <p id="resumeSummary" style="font-size:13px; color:#cbd5ff; margin-bottom:10px;"></p>
+
+      <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(120px,1fr)); gap:8px; font-size:13px;">
+        <div class="resume-score-pill">
+          <div class="pill-label">Overall</div>
+          <div id="resOverallScore" class="pill-value">–</div>
+        </div>
+        <div class="resume-score-pill">
+          <div class="pill-label">ATS</div>
+          <div id="resATSScore" class="pill-value">–</div>
+        </div>
+        <div class="resume-score-pill">
+          <div class="pill-label">Clarity</div>
+          <div id="resClarityScore" class="pill-value">–</div>
+        </div>
+        <div class="resume-score-pill">
+          <div class="pill-label">Impact</div>
+          <div id="resImpactScore" class="pill-value">–</div>
+        </div>
+        <div class="resume-score-pill">
+          <div class="pill-label">Grammar</div>
+          <div id="resGrammarScore" class="pill-value">–</div>
+        </div>
+      </div>
+
+      <div style="margin-top:14px;">
+        <canvas id="resumeChart" height="150"></canvas>
+      </div>
+    </div>
+
+    <!-- Strengths & Improvements -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:18px;">
+      <div id="resumeStrengthsCard"
+           style="display:none; background:rgba(15,23,42,0.9); border-radius:12px; padding:12px;">
+        <h3 style="margin-top:0;">Key Strengths</h3>
+        <ul id="resumeStrengthsList" class="resume-list"></ul>
+      </div>
+
+      <div id="resumeImprovementsCard"
+           style="display:none; background:rgba(15,23,42,0.9); border-radius:12px; padding:12px;">
+        <h3 style="margin-top:0;">Improvements</h3>
+        <ul id="resumeImprovementsList" class="resume-list"></ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT: Tips -->
+  <aside class="resume-aside">
+    <h4>Resume Tips</h4>
+    <ul class="resume-tips">
+      <li>Use strong action verbs: led, built, designed, achieved.</li>
+      <li>Quantify: “Improved accuracy by 23%”, “Handled 120+ customers per day”.</li>
+      <li>Keep formatting simple, ATS-friendly – no fancy tables.</li>
+      <li>Tailor the resume for each role, especially the top 3 bullets.</li>
+      <li>For students, highlight projects, Olympiads, competitions, and responsibilities.</li>
+    </ul>
+  </aside>
+</div>
+
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/resume.js') }}"></script>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+.resume-aside {
+  padding:14px;
+  border-left:1px solid rgba(255,255,255,0.05);
+  background:rgba(15,23,42,0.9);
+  border-radius:14px;
+  box-shadow:0 16px 40px rgba(0,0,0,0.6);
+}
+.resume-tips {
+  padding-left:18px;
+  font-size:13px;
+  color:#cbd5f5;
+}
+.resume-tips li { margin-bottom:6px; }
+
+.resume-score-pill {
+  border-radius:12px;
+  padding:8px 10px;
+  background:rgba(15,23,42,0.95);
+  border:1px solid rgba(129,140,248,0.6);
+  text-align:left;
+}
+.resume-score-pill .pill-label {
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:0.05em;
+  color:#9ca3ff;
+}
+.resume-score-pill .pill-value {
+  font-size:18px;
+  font-weight:600;
+}
+
+.resume-list {
+  list-style:none;
+  padding-left:0;
+  font-size:13px;
+  color:#e5e7eb;
+}
+.resume-list li {
+  margin-bottom:6px;
+  padding-left:14px;
+  position:relative;
+}
+.resume-list li::before {
+  content:"•";
+  position:absolute;
+  left:0;
+  top:0;
+  color:#a5b4fc;
+}
+</style>
+{% endblock %}

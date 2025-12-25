@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block title %}Experience of Our Users{% endblock %}
+
+{% block content %}
+<div class="home-container">
+
+<h1 class="hero-title" style="margin-top:150px; text-align: center;">Experience of Our Users</h1>
+
+<!-- Average Rating -->
+<div class="rating-glass">
+  <div class="rating-circle">
+    <h2>{{ avg_rating }}</h2>
+    <span style="font-size: 30px;">/ 5.0</span>
+  </div>
+  <p class="stars">★★★★★</p>
+</div>
+
+<!-- Star Distribution -->
+
+
+<hr>
+
+<!-- Reviews -->
+<h2 class="hero-subtitle">💬 What Users Say</h2>
+
+{% for f in feedbacks %}
+<div class="feedback-card {% if f.featured %}featured{% endif %}">
+  <h3>
+    {{ f.name or "Anonymous" }}
+    {% if f.verified %}<span class="verified">✔ Verified</span>{% endif %}
+  </h3>
+
+  <p class="stars">{{ "⭐" * f.rating }}</p>
+  <p>{{ f.message }}</p>
+
+  {% if f.reply %}
+    <div class="admin-reply">🟢 Creators: {{ f.reply }}</div>
+  {% endif %}
+</div>
+{% endfor %}
+
+</div>
+{% endblock %}

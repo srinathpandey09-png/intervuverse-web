@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Register{% endblock %}
+{% block content %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Register - IntervuVerse</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="login-page">
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">IntervuVerse</div>
+      <div class="login-tagline">Create account</div>
+    </div>
+    <div class="login-form">
+      <input id="reg_name" class="form-input-login" placeholder="Full name">
+      <input id="reg_email" class="form-input-login" placeholder="Email">
+      <input id="reg_password" class="form-input-login" placeholder="Password" type="password">
+      <button class="btn-login btn-primary-login" onclick="registerUser()">Register</button>
+      <div style="height:12px"></div>
+      <div style="text-align:center">Already have account? <a href="/login" style="color: rgba(210, 207, 31, 0.653);">Login</a></div>
+    </div>
+  </div>
+  <script src="/static/js/auth.js"></script>
+<script>async function registerUser(){const name=document.getElementById("reg_name").value;const email=document.getElementById("reg_email").value;const pass=document.getElementById("reg_password").value;const res=await fetch("/api/register",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({name,email,pass})});const j=await res.json();if(j.success){location.href="/dashboard";}else{alert(j.message);}}</script></body>
+</html>
+
+{% endblock %}

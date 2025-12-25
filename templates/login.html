@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+{% block content %}
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Login - IntervuVerse</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="login-page">
+  <div class="login-container">
+    <div class="login-header">
+      <div class="login-logo">IntervuVerse</div>
+      <div class="login-tagline">Sign in to continue</div>
+    </div>
+    <div class="login-form">
+      <input id="login_email" class="form-input-login" placeholder="Email">
+      <input id="login_password" class="form-input-login" placeholder="Password" type="password">
+      <button class="btn-login btn-primary-login" onclick="loginUser()">Login</button>
+      <div style="height:12px"></div>
+      <div style="text-align:center">Or <a href="/register" style="color: rgba(210, 207, 31, 0.653);">Register</a></div>
+    </div>
+  </div>
+  <script src="/static/js/auth.js"></script>
+<script>async function loginUser()
+     {
+      const email=document.getElementById("login_email").value;
+      const pass=document.getElementById("login_password").value; 
+     const res=await fetch("/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email,pass})});
+      const j=await res.json();
+      
+      if(j.success){location.href="/";}
+      
+      
+
+      else{alert(j.message);}
+     } 
+      </script>
+      </body>
+</html>
+
+{% endblock %}

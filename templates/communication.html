@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% block title %}AI Communication Trainer{% endblock %}
+
+{% block content %}
+
+
+
+
+<div class="communication-page">
+  <div class="communication-container">
+
+<section class="hero-minimal page-hero centered subtle-fade comm-hero">
+  <div class="container-minimal hero-content comm-hero-inner">
+    <div>
+      <h1 class="hero-title">Communication & Public Speaking Studio</h1>
+      <p class="hero-subtitle">
+        Practise speeches, conversations and debates in a realistic virtual studio.
+        AI will listen, analyse your delivery and give structured feedback.
+      </p>
+      <p class="hero-subtitle"> Scroll Down and start the session Now!</p>
+    </div>
+    <div class="cta-group">
+        <a class="btn-minimal btn-primary-minimal" href="/">Back to home</a>
+</div>
+  </div>
+</section>
+
+
+<div class="container-minimal" style="margin-top:18px; display:grid; grid-template-columns:minmax(0,1.5fr) minmax(280px,0.9fr); gap:20px;">
+
+  <!-- LEFT: main console -->
+  <div>
+
+    <!-- Mode + session settings -->
+    <div class="form-row-minimal" style="display:flex; flex-wrap:wrap; gap:10px; align-items:flex-end;">
+      <div style="min-width:190px;">
+        <label class="small-label">Mode</label>
+        <select id="commMode" class="form-select-minimal">
+          <option value="speech">Public Speaking Trainer</option>
+          <option value="conversation">Conversational English</option>
+          <option value="debate">Debate & Argumentation</option>
+        </select>
+      </div>
+
+      <div style="min-width:190px;">
+        <label class="small-label">Session Type</label>
+        <select id="commSessionType" class="form-select-minimal">
+          <option value="open">Open session (manual end)</option>
+          <option value="timed_3">Timed – 3 minutes</option>
+          <option value="timed_5">Timed – 5 minutes</option>
+          <option value="timed_10">Timed – 10 minutes</option>
+        </select>
+      </div>
+
+      <div style="flex:1; min-width:220px;">
+        <label class="small-label">Topic / Theme / Goal (optional)</label>
+        <input id="commTopic" class="form-input-minimal" placeholder="e.g. My role model, Introduce yourself, Climate change...">
+      </div>
+
+      <div style="min-width:130px;">
+        <label class="small-label">Difficulty</label>
+        <select id="commLevel" class="form-select-minimal">
+          <option value="easy">Warm-up</option>
+          <option value="standard" selected>Standard</option>
+          <option value="tough">Challenging</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
+      <button id="commStartBtn" class="btn-minimal btn-primary-minimal btn-large">Start Session</button>
+      <button id="commEndBtn" class="btn-minimal btn-secondary-minimal">End Session</button>
+      <button id="commDownloadBtn" class="btn-minimal btn-secondary-minimal">Download Report (PDF)</button>
+
+      <div id="commStatus" style="margin-left:auto; font-size:13px; color:#9fb3ff;">
+        Studio idle.
+      </div>
+    </div>
+
+    <div style="margin-top:8px; display:flex; gap:14px; font-size:12px; color:#a5b4fc;">
+      <div id="commTimer">Open session</div>
+      <div id="commProgress"></div>
+    </div>
+
+    <hr style="margin:18px 0">
+
+    <h3>Prompt / Question / Motion</h3>
+    <div id="commPromptBox"
+         class="form-input-minimal"
+         style="min-height:70px; white-space:pre-wrap; word-wrap:break-word;"></div>
+
+    <h3>Your Spoken Answer</h3>
+    <div id="commAnswerBox"
+         class="form-input-minimal"
+         style="min-height:70px; white-space:pre-wrap; word-wrap:break-word;"></div>
+
+    <h3>AI Communication Feedback</h3>
+    <div id="commFeedbackBox"
+         class="form-input-minimal"
+         style="min-height:110px; white-space:pre-wrap; word-wrap:break-word;"></div>
+
+    <div style="margin-top:12px; display:flex; gap:12px; align-items:center;">
+      <div id="commScoreLine" style="font-size:13px; color:#e0e0e0;"></div>
+      <div style="margin-left:auto; font-size:13px; color:#9aa0ff;">
+        <span id="commRoundLabel"></span>
+      </div>
+    </div>
+
+    <div style="margin-top:18px;">
+      <canvas id="commMiniChart" width="560" height="160"></canvas>
+    </div>
+
+  </div>
+
+  <!-- RIGHT: studio feel -->
+  <aside class="comm-panel-aside">
+    <h4>Studio Panel</h4>
+
+    <div class="comm-panel-card">
+      <div class="comm-panel-row">
+        <div>
+          <div class="panel-name">Communication Coach</div>
+          <div id="commCoachStatus" class="panel-status">Waiting to start.</div>
+        </div>
+        <div class="panel-dot online"></div>
+      </div>
+    </div>
+
+    <div class="comm-panel-card">
+      <div class="comm-panel-row">
+        <div>
+          <div class="panel-name">Language Analyst</div>
+          <div id="commLanguageStatus" class="panel-status">Will analyse grammar & vocabulary.</div>
+        </div>
+        <div class="panel-dot idle"></div>
+      </div>
+    </div>
+
+    <div class="comm-panel-card">
+      <div class="comm-panel-row">
+        <div>
+          <div class="panel-name">Confidence Mentor</div>
+          <div id="commConfidenceStatus" class="panel-status">Watching confidence & clarity.</div>
+        </div>
+        <div class="panel-dot idle"></div>
+      </div>
+    </div>
+
+    <h5 style="margin-top:14px;">Speaking Tips</h5>
+    <ul class="comm-tips">
+      <li>Breathe slowly before starting your answer.</li>
+      <li>Speak in clear, short sentences with small pauses.</li>
+      <li>Keep your chin up and maintain a gentle smile.</li>
+      <li>Imagine you are talking to a real panel in front of you.</li>
+    </ul>
+  </aside>
+</div>
+
+<!-- Confetti canvas for high scores -->
+<canvas id="commConfettiCanvas"
+        style="position:fixed; inset:0; z-index: 10;pointer-events:none; display:none; z-index:2500;"></canvas>
+
+  </div>
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="{{ url_for('static', filename='js/communication.js') }}"></script>
+{% endblock %}
+

@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}About IntervuVerse{% endblock %}
+
+{% block content %}
+<div class="about-page">
+<div class="creator">
+  <div class="creator-container">
+    <section class="about-hero fade-in delay-1">
+  <section class="about-hero">
+    <h1 class="hero-title">About IntervuVerse</h1>
+    <p>
+      IntervuVerse is an AI-powered platform designed to help students and professionals
+      master viva exams, interviews, communication, and confidence.
+    </p>
+  </section>
+  
+
+  <section class="about-mission">
+    <h2>Our Mission</h2>
+    <p>
+      To democratize interview preparation using ethical AI, realistic simulations,
+      and meaningful feedback — accessible to every learner.
+    </p>
+  </section>
+
+  <section class="about-team">
+    <h2>Meet the Creators</h2>
+    <a href="mailto:srinathpandey09@gmail.com"style="color: #ffffff";>Mail the Creator</a><br>
+        <a href="tel:9532100506"style="color: #ffffff";>Call Us: 9532100506</a>
+
+    <div class="team-grid">
+      <div class="team-card">
+        <img src="/static/images/creator1.jpg" alt="Creator Photo">
+        <h2>creator</h2>
+        <span> Founder and Content Designer</span>
+        <p style="font-size: 20px;">
+         "As the Founder and Developer, I engineered Intervuverse not just as
+          a tool, but as a comprehensive ecosystem for communication mastery. Intervuverse is the realization of a 
+           commitment to democratize high-level preparation, transforming ambition into 
+           verifiable skill across all modes."
+        </p>
+        
+        
+      </div>
+
+      <div class="team-card">
+        <img src="/static/images/creator2.jpg" alt="Creator Photo">
+        <h3>creator</h3>
+        <span>Frontend Designer</span>
+        <p style="font-size: 20px;">
+          ""
+        </p>
+      </div>
+
+      <div class="team-card">
+        <img src="/static/images/creator3.jpg" alt="Creator Photo">
+        <h3>creator</h3>
+        <span>Backend Developer </span>
+        <p style="font-size: 20px;">
+          ""
+        </p>
+      </div>
+
+      <div class="team-card">
+        <img src="/static/images/creator4.jpg" alt="Creator Photo">
+        <h3>Creator</h3>
+        <span>Database Manager </span>
+        <p style="font-size: 20px;">
+         ""
+        </p>
+      </div>
+
+      <div class="team-card">
+        <img src="/static/images/creator5.jpg" alt="Creator Photo">
+        <h3>Creator</h3>
+        <span>Functioning manager</span>
+        <p style="font-size: 20px;">
+         ""
+        </p>
+      </div>
+
+      
+
+    </div>
+  </section>
+
+  <section class="about-feedback">
+    <h2>Send Us Feedback</h2>
+
+    <textarea id="feedbackText" placeholder="Write your feedback here..."></textarea>
+
+    <select id="feedbackRating">
+      <option value="Select">Select Star Rating</option>
+      <option value="5">⭐⭐⭐⭐⭐ Excellent</option>
+      <option value="4">⭐⭐⭐⭐ Very Good</option>
+      <option value="3">⭐⭐⭐ Good</option>
+      <option value="2">⭐⭐ Needs Improvement</option>
+      <option value="1">⭐ Poor</option>
+    </select>
+
+    <button onclick="submitFeedback()" class="btn-minimal btn-primary-minimal">Submit Feedback</button>
+  </section>
+  </section>
+
+</div>
+
+<section class="about-feedback">
+  <h2>📩 Replies From The Creators</h2>
+  <div id="adminReplies"></div>
+</section>
+
+
+<script>
+function submitFeedback() {
+  fetch("/api/submit_feedback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      message: document.getElementById("feedbackText").value,
+      rating: document.getElementById("feedbackRating").value
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.success) {
+      alert("Thank you for your feedback!");
+      document.getElementById("feedbackText").value = "";
+    }
+    else{alert("Please enter the feedback");}
+  });
+}
+</script>
+<script>
+function loadMyFeedback() {
+  fetch("/api/my_feedback")
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) return;
+
+      const container = document.getElementById("adminReplies");
+      container.innerHTML = "";
+
+      if (data.feedback.length === 0) {
+        container.innerHTML = "<p>No feedback submitted yet.</p>";
+        return;
+      }
+
+      data.feedback.forEach(f => {
+        const box = document.createElement("div");
+        box.className = "feedback-box";
+
+        box.innerHTML = `
+          <p><b>Your Message:</b> ${f.message}</p>
+          ${f.reply 
+            ? `<p class="reply">🟢 <b>Creators' Reply:</b> ${f.reply}</p>`
+            : `<p class="pending">⏳ Waiting for creators' reply</p>`
+          }
+        `;
+
+        container.appendChild(box);
+      });
+    });
+}
+
+document.addEventListener("DOMContentLoaded", loadMyFeedback);
+</script>
+
+{% endblock %}

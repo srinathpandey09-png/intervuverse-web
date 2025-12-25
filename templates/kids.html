@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block title %}Pre-Primary Trainer{% endblock %}
+
+{% block head_extras %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/kids.css') }}">
+{% endblock %}
+
+{% block content %}
+
+
+<section class="kids-hero">
+  <div class="kids-hero-inner container-minimal">
+    <div class="kids-left">
+      <div class="kid-avatar-big">😊</div>
+      <h1 class="hero-title2">Kids Mode </h1>
+      <p class="hero-subtitle2">Friendly voice interaction in a playful classroom .</p>
+      <div class="controls">
+        <button id="startBtn" class="btn-minimal2 btn-primary-minimal2">Start Round</button>
+        <button id="downloadReport" class="btn-minimal btn-secondary-minimal" style="display:none">Download Report</button>
+        <div class="cta-group">
+        <a class="btn-minimal btn-primary-minimal" href="/">Back to home</a>
+</div>
+      </div>
+    </div>
+
+    <div class="kids-right">
+      <div class="card kid-card">
+        <div class="blackboard">Question</div>
+        <div id="questionText" class="kid-field">Press <strong>Start Round</strong> to hear a question</div>
+
+        <div class="blackboard">Answer (transcribed)</div>
+        <div id="answerText" class="kid-field">...</div>
+
+        <div class="blackboard">Feedback</div>
+        <div id="feedbackText" class="kid-field">...</div>
+
+        <div class="kid-controls">
+          <div id="starsWrap" class="stars-wrap"></div>
+          <div id="stickers" class="stickers"></div>
+        </div>
+      </div>
+
+      <div class="card stats-card">
+        <h3>Your Progress</h3>
+        <canvas id="kidsChart" width="400" height="160"></canvas>
+        <div class="chart-legend">Recent rounds (saved)</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- confetti canvas -->
+<canvas id="confetti-canvas" class="confetti-canvas"></canvas>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/kids.js') }}"></script>
+{% endblock %}

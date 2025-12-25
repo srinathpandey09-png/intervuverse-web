@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}Announcements{% endblock %}
+
+{% block content %}
+
+<div class="home-page2">
+  <div class="home2-container">
+
+<section class="hero-minimal">
+  <div class="container-minimal hero-content centered subtle-fade">
+    <h1 class="hero-title">📢 Announcements</h1>
+    <p class="hero-subtitle">
+      Official updates & important messages from the IntervuVerse team
+      
+    </p>
+  </div>
+
+
+<section class="feature-section container-minimal subtle-fade">
+
+  {% if announcements %}
+    {% for a in announcements %}
+      <div class="announcement-card">
+        <h2>{{ a.title }}</h2>
+        <p>{{ a.message }}</p>
+        
+      </div>
+    {% endfor %}
+  {% else %}
+    <p class="centered">No announcements yet.</p>
+  {% endif %}
+
+</section>
+</section>
+  </div>
+</div>
+
+{% endblock %}

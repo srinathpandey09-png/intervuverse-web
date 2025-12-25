@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block title %}Settings{% endblock %}
+
+{% block content %}
+
+
+<div class="settings-page">
+  <div class="settings-container">
+<div class="container-minimal subtle-fade settings-page">
+
+  
+  <section class="about-hero">
+    <h1 class="hero-title">Settings</h1>
+    
+  </section>
+
+  <form id="settingsForm" method="post" action="/api/save_settings">
+
+    {{ csrf_token() }}
+
+    <!-- Language -->
+    <div class="settings-section">
+      <h2>Language</h2>
+      <select name="language" class="form-input-minimal">
+        <option value="en" {% if user.language=='en' %}selected{% endif %}>English</option>
+        <option value="hi" {% if user.language=='hi' %}selected{% endif %}>Hindi</option>
+        <option value="bn" {% if user.language=='bn' %}selected{% endif %}>Bengali</option>
+        <option value="ta" {% if user.language=='ta' %}selected{% endif %}>Tamil</option>
+        <option value="te" {% if user.language=='te' %}selected{% endif %}>Telugu</option>
+        <option value="mr" {% if user.language=='mr' %}selected{% endif %}>Marathi</option>
+        <option value="gu" {% if user.language=='gu' %}selected{% endif %}>Gujarati</option>
+        <option value="kn" {% if user.language=='kn' %}selected{% endif %}>Kannada</option>
+      </select>
+    </div>
+
+    <!-- Theme -->
+    <div class="settings-section">
+      <h2>Theme</h2>
+      <select name="theme" class="form-input-minimal">
+        <option value="light" {% if user.theme=='light' %}selected{% endif %}>Light</option>
+        <option value="dark" {% if user.theme=='dark' %}selected{% endif %}>Dark</option>
+        <option value="system" {% if user.theme=='system' %}selected{% endif %}>System Default</option>
+      </select>
+    </div>
+
+
+    <div class="settings-section">
+  <h2>Gemini API Key</h2>
+  <input
+    type="password"
+    name="gemini_api_key"
+    class="form-input-minimal"
+    placeholder="Paste your Gemini API key"
+    value="{{ user.gemini_api_key or '' }}"
+  >
+  <p class="hint-text">
+🔒 Your key is stored securely and used only for your account.  </p>
+</div>
+
+   
+
+    <!-- Voice -->
+    <div class="settings-section">
+      <h2>AI Voice</h2>
+      <select name="voice" class="form-input-minimal">
+        <option value="male" {% if user.voice=='male' %}selected{% endif %}>Male</option>
+        <option value="female" {% if user.voice=='female' %}selected{% endif %}>Female</option>
+      </select>
+
+      <h3>Speed</h3>
+      <select name="speed" class="form-input-minimal">
+        <option value="slow" {% if user.speed=='slow' %}selected{% endif %}>Slow</option>
+        <option value="medium" {% if user.speed=='medium' %}selected{% endif %}>Medium</option>
+        <option value="fast" {% if user.speed=='fast' %}selected{% endif %}>Fast</option>
+      </select>
+    </div>
+
+
+
+
+    <!-- Notifications -->
+    <div class="settings-section">
+      <h2>Notifications</h2>
+      <label><input type="checkbox" name="weekly_report" {% if user.weekly_report %}checked{% endif %}> Weekly Report</label>
+      <label><input type="checkbox" name="reminders" {% if user.reminders %}checked{% endif %}> Study Reminders</label>
+      <label><input type="checkbox" name="badges" {% if user.badges %}checked{% endif %}> Achievement Alerts</label>
+    </div>
+
+    <button class="btn-minimal btn-primary-minimal" type="submit">Save Settings</button>
+  </form>
+</div>
+</div>
+</div>
+{% endblock %}

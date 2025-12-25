@@ -1,0 +1,494 @@
+{% extends "base.html" %}
+{% block title %}AI Exam & Viva Simulator{% endblock %}
+
+{% block content %}
+
+<div class="viva-upper-bg"></div>
+<div class="viva-content-wrapper">
+
+<section class="hero-minimal page-hero centered subtle-fade">
+  <div class="container-minimal hero-content">
+    <h1 class="hero-title"> Exam & Viva Simulator</h1>
+    <p class="hero-subtitle">Pick board, class & subject (optional topic). AI will ask viva-style questions strictly aligned to selected syllabus.</p>
+    <div class="school-banner">School Viva — Classes 6 to 12</div>
+    <p class="hero-subtitle"> Scroll Down and start the viva Now!</p>
+    <p class="hero-title">⬇</p>
+    <div class="cta-group">
+        <a class="btn-minimal btn-primary-minimal" href="/">Back to home</a>
+</div>
+  </div>
+</section>
+
+
+
+<div class="container-minimal card-animated" style="margin-top:18px; display:grid; grid-template-columns: 1fr 320px; gap:20px;">
+  <!-- Left: main runner -->
+  <div>
+    <div class="form-row-minimal" style="gap:8px; display:flex; flex-wrap:wrap;">
+      <select id="board" class="form-select-minimal" style="min-width:170px;">
+        <option value="">Select Board</option>
+        <option value="ICSE">ICSE/ISC </option>
+        <option value="CBSE">CBSE</option>
+        <option value="IGCSE">IGCSE</option>
+        <option value="IB">IB</option>
+        <option value="State (UP)">State (UP)</option>
+        <option value="State (MH)">State (MH)</option>
+      </select>
+
+      <select id="cls" class="form-select-minimal" style="min-width:120px;">
+        <option value="">Select Class</option>
+        <option value="6">6</option>
+        <option value="7">7</option>
+        <option value="8">8</option>
+        <option value="9">9</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+      </select>
+
+      <select id="subject" class="form-select-minimal" style="min-width:220px;">
+        <!-- filled by JS based on board+class -->
+      </select>
+
+      <input id="topic" class="form-input-minimal" placeholder="Optional: topic or chapter (e.g. Newton's laws)" style="flex:1; min-width:180px;">
+    </div>
+
+    <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
+      <label style="display:flex; gap:8px; align-items:center;">
+        <input id="strictMode" type="checkbox"> <small>Strict syllabus questions (recommended)</small>
+      </label>
+      <label style="display:flex; gap:8px; align-items:center;">
+        <select id="qcount" class="form-select-minimal" style="width:86px;">
+          <option value="3">3 Qs</option>
+          <option value="5" selected>5 Qs</option>
+          <option value="8">8 Qs</option>
+        </select>
+      </label>
+
+      <button id="startBtn" class="btn-minimal btn-primary-minimal btn-large">Start Viva</button>
+      <button id="downloadReportBtn" class="btn-minimal btn-secondary-minimal">Download Session PDF</button>
+      <button id="showAnalyticsBtn" class="btn-minimal btn-secondary-minimal">Show Analytics</button>
+    </div>
+
+    <hr style="margin:18px 0">
+
+    <h3>Question</h3>
+    <div id="questionText" class="form-input-minimal" style="min-height:72px; white-space:pre-wrap;"></div>
+
+    <h3>Your Answer</h3>
+    <div id="answerText" class="form-input-minimal" style="min-height:72px; white-space:pre-wrap;"></div>
+
+    <h3>Feedback</h3>
+     <pre id="feedbackText" class="form-input-minimal" 
+     style="min-height:96px; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word;"></pre>
+
+    <div style="margin-top:12px; display:flex; gap:12px; align-items:center;">
+      <div id="starsWrap"></div>
+      <div id="sessionProgress" style="margin-left:auto; color:#666"></div>
+    </div>
+  </div>
+
+  <!-- Right: helper, tips, chart -->
+  <aside style="padding:14px; border-left:1px solid rgba(0,0,0,0.04);">
+    <h4>Helper & Tips</h4>
+    <p><strong>How it works:</strong> AI will ask viva-style questions tailored to the board & class you choose. Use the topic box to request chapter-specific questions (optional).</p>
+
+    <h5>Evaluation Criteria</h5>
+    <ul style="padding-left:18px; margin-top:6px;">
+      <li>Accuracy</li>
+      <li>Concept clarity</li>
+      <li>Vocabulary</li>
+      <li>Presentation & Confidence</li>
+      <li>Completeness</li>
+    </ul>
+
+    <h5 style="margin-top:10px">Quick Tips</h5>
+    <ol style="padding-left:18px;">
+      <li>Speak clearly to the mic — allow browser mic access.</li>
+      <li>Try to give 2–3 sentence answers for full credit.</li>
+      <li>Use the topic box for focused practice.</li>
+    </ol>
+
+    <div style="margin-top:16px">
+      <canvas id="chartCanvas" width="300" height="160"></canvas>
+    </div>
+  </aside>
+</div>
+
+<!-- analytics modal area (simple) -->
+<div id="analyticsModal" style="display:none; position:fixed; z-index: 10; inset:0; background:rgba(0,0,0,0.5); align-items:center; justify-content:center;">
+  <div style="background:#fff; padding:18px; width:90%; max-width:900px;">
+    <h3>Session Analytics</h3>
+    <canvas id="fullChart" width="800" height="320"></canvas>
+    <div style="text-align:right; margin-top:12px;">
+      <button class="btn-minimal" onclick="document.getElementById('analyticsModal').style.display='none'">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- confetti canvas (full screen) -->
+<canvas id="confettiCanvas" style="position:fixed; z-index: 10; inset:0; pointer-events:none; display:none;"></canvas>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+/* viva.js embedded:
+   Uses backend endpoints:
+     - POST /api/question?board=..&class=..&subject=..&topic=..  (we will call /api/question with query)
+     - POST /api/evaluate  {question, answer, module:"viva"}  (your app evaluates & saves to progress)
+     - POST /api/session_report  (creates PDF)
+     - GET  /api/session_stats
+*/
+
+(function(){
+  // --- DOM
+  const boardEl = document.getElementById('board');
+  const clsEl = document.getElementById('cls');
+  const subjectEl = document.getElementById('subject');
+  const topicEl = document.getElementById('topic');
+  const startBtn = document.getElementById('startBtn');
+  const qcountEl = document.getElementById('qcount');
+  const strictModeEl = document.getElementById('strictMode');
+
+  const questionText = document.getElementById('questionText');
+  const answerText = document.getElementById('answerText');
+  const feedbackText = document.getElementById('feedbackText');
+  const starsWrap = document.getElementById('starsWrap');
+  const sessionProgress = document.getElementById('sessionProgress');
+  const downloadReportBtn = document.getElementById('downloadReportBtn');
+  const showAnalyticsBtn = document.getElementById('showAnalyticsBtn');
+  const chartCanvas = document.getElementById('chartCanvas');
+  const confettiCanvas = document.getElementById('confettiCanvas');
+  const confettiCtx = confettiCanvas.getContext('2d');
+
+  let sessionAnswers = [];
+  let sessionScores = [];
+  let running = false;
+
+  // --- boards -> subjects map (comprehensive lists)
+  const SUBJECTS = {
+    "ICSE": {
+      "6": ["English Language","English Literature","Hindi Grammar","Hindi Literature","Sanskrit","History","Civics","Geography","Mathematics","Physics","Chemistry","Biology","Computer Applications","Art","Performing Arts","Home Science","Physical Education","Yoga"],
+      "7": ["English Language","English Literature","Hindi Grammar","Hindi Literature","Sanskrit","History","Civics","Geography","Mathematics","Physics","Chemistry","Biology","Computer Applications","Art","Performing Arts","Home Science","Physical Education","Yoga"],
+      "8": ["English Language","English Literature","Hindi Grammar","Hindi Literature","Sanskrit","History","Civics","Geography","Mathematics","Physics","Chemistry","Biology","Computer Applications","Art","Performing Arts","Home Science","Physical Education","Yoga"],
+      "9": ["English Language","English Literature","Hindi Grammar","Hindi Literature","History","Civics","Geography","Mathematics","Physics","Chemistry","Biology","Economics","Computer Applications","Commercial Applications","Art","Performing Arts","Home Science","Cookery","Fashion Designing","Physical Education","Yoga"],
+      "10":["English Language","English Literature","Hindi Grammar","Hindi Literature","History","Civics","Geography","Mathematics","Physics","Chemistry","Biology","Economics","Computer Applications","Commercial Applications","Art","Performing Arts","Home Science","Cookery","Fashion Designing","Physical Education","Yoga"],
+      "11":["Physics","Chemistry","Biology","Mathematics","Computer Science","History","Political Science","Psychology","Sociology","Legal Studies","Accounts","Commerce","Economics","English Language","English Literature","Hindi"],
+      "12":["Physics","Chemistry","Biology","Mathematics","Computer Science","History","Political Science","Psychology","Sociology","Legal Studies","Accounts","Commerce","Economics","English Language","English Literature","Hindi"]
+    },
+    "CBSE": {
+      "9": ["English Language & Literature","Hindi Language & Literature","Basic Mathematics","Standard Mathematics","Science (Physics+Chemistry+Biology)","Social Science (History/Civics/Geography)","Computer Science"],
+      "10":["English Language & Literature","Hindi Language & Literature","Basic Mathematics","Standard Mathematics","Science (Physics+Chemistry+Biology)","Social Science (History/Civics/Geography)","Computer Science"],
+      "11":["Mathematics","Physics","Chemistry","Biology","Economics","Political Science","History","Business Studies","Accountancy","Home Science","Fine Arts","Agriculture","Computer Science","Sociology","Psychology","Philosophy","Physical Education","Music","Dance","English","Hindi"],
+      "12":["Mathematics","Physics","Chemistry","Biology","Economics","Political Science","History","Business Studies","Accountancy","Home Science","Fine Arts","Agriculture","Computer Science","Sociology","Psychology","Philosophy","Physical Education","Music","Dance","English","Hindi"]
+    },
+    "IGCSE": { "default":["English","Mathematics","Physics","Chemistry","Biology","History","Geography","Computer Science","Economics","Art"] },
+    "IB": { "default":["English","Mathematics","Physics","Chemistry","Biology","History","Geography","Computer Science","Economics","Art"] },
+    "State (UP)": { "default":["English","Hindi","Mathematics","Science","Social Science","Computer"] },
+    "State (MH)": { "default":["English","Hindi","Marathi","Mathematics","Science","Social Science","Computer"] }
+  };
+
+  // fill subject list when board/class change
+  function populateSubjects(){
+    const board = boardEl.value;
+    const cls = clsEl.value;
+    subjectEl.innerHTML = "";
+    let list = [];
+    if(!board){ subjectEl.innerHTML = '<option value="">Select board first</option>'; return; }
+    const map = SUBJECTS[board] || SUBJECTS["IGCSE"];
+    if(map[cls]) list = map[cls];
+    else if(map["default"]) list = map["default"];
+    else {
+      // combine all arrays if nothing matched
+      for(let k in map){
+        if(Array.isArray(map[k])) list = list.concat(map[k]);
+      }
+    }
+    list = Array.from(new Set(list)); // unique
+    list.forEach(s => {
+      const o = document.createElement('option'); o.value = s; o.innerText = s;
+      subjectEl.appendChild(o);
+    });
+  }
+
+  boardEl.addEventListener('change', populateSubjects);
+  clsEl.addEventListener('change', populateSubjects);
+
+  function speakAndWait(text){
+  return new Promise(resolve=>{
+    if(!('speechSynthesis' in window)){
+      resolve();
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = 'en-IN';
+    u.rate = 0.95;
+    u.onend = () => resolve();   // ✅ WAIT until speech ends
+    window.speechSynthesis.speak(u);
+  });
+}
+
+
+  // --- Web Speech helpers (listen + speak) ---
+  function speak(text){
+    return new Promise((resolve) => {
+      if(!('speechSynthesis' in window)){
+        resolve();
+        return;
+      }
+      window.speechSynthesis.cancel();
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-IN';
+      u.rate = 0.95;
+      u.onend = () => resolve();
+      u.onerror = () => resolve();
+      window.speechSynthesis.speak(u);
+    });
+  }
+
+  function listenOnce(timeoutMs=9000){
+    return new Promise((resolve) => {
+      const Rec = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if(!Rec) return resolve("");
+      const r = new Rec();
+      r.lang = 'en-IN';
+      r.interimResults = false;
+      r.maxAlternatives = 1;
+      let done=false;
+      const to = setTimeout(()=> { if(!done){ done=true; try{ r.stop(); }catch(e){}; resolve(""); } }, timeoutMs);
+
+      r.onresult = (ev)=>{
+        if(done) return;
+        done = true; clearTimeout(to);
+        resolve(ev.results[0][0].transcript || "");
+      };
+      r.onerror = ()=> { if(done) return; done=true; clearTimeout(to); resolve(""); };
+      r.onend = ()=> { if(done) return; done=true; clearTimeout(to); resolve(""); };
+      try{ r.start(); } catch(e){ clearTimeout(to); resolve(""); }
+    });
+  }
+
+  // --- evaluation + question API wrappers ---
+  async function fetchQuestion(board, cls, subject, topic, strict){
+    // call your backend /api/question (it expects query params in app.py -> uses gemini.generate_question)
+    const qparams = new URLSearchParams();
+    if(board) qparams.append('board', board);
+    if(cls) qparams.append('class', cls);
+    if(subject) qparams.append('subject', subject);
+    if(topic) qparams.append('topic', topic);
+    if(strict) qparams.append('strict', '1'); // backend can optionally use this
+    const res = await fetch('/api/question?' + qparams.toString());
+    if(!res.ok) throw new Error('No question');
+    const j = await res.json();
+    // backend returns JSON or string
+    return (typeof j === 'string') ? j : (j.question || j);
+  }
+
+  async function evaluateAnswer(question, answer){
+    const res = await fetch('/api/evaluate', {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ question, answer, module: 'viva' })
+    });
+    if(!res.ok) return { score: 50, notes: 'Could not evaluate' };
+    return res.json();
+  }
+
+  // --- confetti (simple) ---
+  function resizeConfetti(){ confettiCanvas.width = window.innerWidth; confettiCanvas.height = window.innerHeight; }
+  resizeConfetti(); window.addEventListener('resize', resizeConfetti);
+
+  function fireConfetti(){
+    confettiCanvas.style.display='block';
+    const pieces=[];
+    for(let i=0;i<200;i++){
+      pieces.push({
+        x: Math.random()*confettiCanvas.width,
+        y: -20 - Math.random()*200,
+        r: 6 + Math.random()*10,
+        c: ['#ffd166','#ff7aa2','#9be7ff','#b5ffb2'][Math.floor(Math.random()*4)],
+        vx: -1 + Math.random()*2,
+        vy: 2 + Math.random()*4,
+        rot: Math.random()*10
+      });
+    }
+    let t=0;
+    function draw(){
+      t++; confettiCtx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height);
+      for(const p of pieces){
+        p.x += p.vx; p.y += p.vy; p.vy += 0.08; p.rot += 0.1;
+        confettiCtx.save();
+        confettiCtx.translate(p.x,p.y);
+        confettiCtx.rotate(p.rot);
+        confettiCtx.fillStyle = p.c;
+        confettiCtx.fillRect(-p.r/2, -p.r/2, p.r, p.r*1.6);
+        confettiCtx.restore();
+      }
+      if(t<220) requestAnimationFrame(draw);
+      else { confettiCtx.clearRect(0,0,confettiCanvas.width, confettiCanvas.height); confettiCanvas.style.display='none'; }
+    }
+    requestAnimationFrame(draw);
+  }
+
+  // --- UI helpers ---
+  function showStars(n){
+    starsWrap.innerHTML='';
+    for(let i=1;i<=5;i++){
+      const sp = document.createElement('span');
+      sp.style.marginRight='4px';
+      sp.style.fontSize='18px';
+      sp.textContent = (i<=n ? '★' : '☆');
+      starsWrap.appendChild(sp);
+    }
+  }
+
+  // --- run session ---
+  startBtn.addEventListener('click', async ()=>{
+    if(running) return;
+    const board = boardEl.value;
+    const cls = clsEl.value;
+    const subject = subjectEl.value;
+    const topic = topicEl.value.trim();
+    const strict = strictModeEl.checked;
+    const count = parseInt(qcountEl.value || '5', 10);
+
+    if(!board || !cls || !subject){
+      alert('Please choose board, class and subject.');
+      return;
+    }
+
+    running = true;
+    sessionAnswers = [];
+    sessionScores = [];
+    questionText.innerText = 'Preparing session...';
+    answerText.innerText = '';
+    feedbackText.innerText = '';
+    starsWrap.innerHTML='';
+    sessionProgress.innerText = `0 / ${count}`;
+
+    for(let i=0;i<count;i++){
+      try {
+        // get question
+        questionText.innerText = 'Getting question...';
+        await new Promise(r=>setTimeout(r, 300)); // small pause
+        const question = await fetchQuestion(board, cls, subject, topic, strict);
+        questionText.innerText = question;
+
+        // ✅ Speak question and WAIT till it finishes
+        await speakAndWait(question);
+
+       // ✅ Now start listening ONLY after speech ends
+        answerText.innerText = 'Listening... please speak clearly';
+        const answer = await listenOnce(i===0 ? 12000 : 9000);
+
+        answerText.innerText = answer || '(no answer detected)';
+
+        // evaluate
+        feedbackText.innerText = 'Evaluating...';
+        const evalRes = await evaluateAnswer(question, answer || '');
+        sessionAnswers.push({question, answer, evalRes});
+        sessionScores.push(evalRes.score || 0);
+
+        // show feedback
+        showStars(Math.max(1, Math.min(5, Math.floor((evalRes.score||0)/20))));
+        const feedbackLine = `Score ${evalRes.score || 0}. ${evalRes.notes || ''}`;
+        feedbackText.innerText = feedbackLine;
+
+        // ✅ Speak feedback and WAIT till it finishes
+        await speakAndWait(feedbackLine);
+
+
+        // progress
+        sessionProgress.innerText = `${i+1} / ${count}`;
+
+        // small pause between Qs
+        await new Promise(r=>setTimeout(r, 1200));
+      } catch(err){
+        console.error('question loop err', err);
+        feedbackText.innerText = 'Error fetching/evaluating question. Skipping...';
+        sessionProgress.innerText = `${i+1} / ${count}`;
+        await new Promise(r=>setTimeout(r,700));
+      }
+    }
+
+    // session finished
+    feedbackText.innerText = 'Session finished. Preparing summary...';
+    // ✅ Speak final line and ONLY THEN show confetti
+    await speakAndWait('Session complete. You can now download the session report');
+    // show confetti ONCE
+    fireConfetti();
+
+    // update small chart on right panel
+    drawMiniChart(sessionScores);
+
+    // keep a local copy for analytics modal
+    try {
+      // optionally call session_report to create final PDF on server side
+      const report = await fetch('/api/session_report', { method:'POST' });
+      // we don't auto-download to avoid special UX — user can click Download
+    } catch(e){ console.warn('session_report create failed (ignored)', e); }
+
+    running = false;
+  });
+
+  // --- download report ---
+  downloadReportBtn.addEventListener('click', async ()=>{
+    // request a server-side session_report (app.py uses progress table) -> returns PDF blob
+    const res = await fetch('/api/session_report', { method:'POST' });
+    if(!res.ok){ alert('Report generation failed'); return; }
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = 'viva_session_report.pdf';
+    document.body.appendChild(a); a.click(); a.remove();
+    URL.revokeObjectURL(url);
+  });
+
+  // --- analytics ---
+  showAnalyticsBtn.addEventListener('click', async ()=>{
+    document.getElementById('analyticsModal').style.display='flex';
+    const res = await fetch('/api/session_stats');
+    if(!res.ok) return;
+    const data = await res.json();
+    const ctx = document.getElementById('fullChart').getContext('2d');
+    new Chart(ctx, { type:'line', data:{ labels: data.labels, datasets:[{ label:'Score', data:data.scores, fill:false }]}, options:{ responsive:true } });
+  });
+
+  // mini chart on right panel
+  function drawMiniChart(scores){
+    if(!chartCanvas) return;
+    const ctx = chartCanvas.getContext('2d');
+    ctx.clearRect(0,0,chartCanvas.width, chartCanvas.height);
+    const w = chartCanvas.width, h = chartCanvas.height;
+    // draw bars
+    const pad = 8;
+    const max = Math.max(100, ...scores, 10);
+    const bw = (w - pad*2) / Math.max(1, scores.length);
+    scores.forEach((s,i)=>{
+      ctx.fillStyle = ['#ffd166','#ff7aa2','#9be7ff','#b5ffb2'][i%4];
+      const bh = (s / max) * (h - pad*2);
+      ctx.fillRect(pad + i*bw + 4, h - pad - bh, bw - 8, bh);
+    });
+  }
+
+  // initialize subjects if board/class preselected
+  populateSubjects();
+  // initial load of session_stats mini-chart
+  (async ()=>{
+    try{
+      const r = await fetch('/api/session_stats');
+      if(r.ok){
+        const j = await r.json();
+        drawMiniChart(j.scores || []);
+      }
+    }catch(e){}
+  })();
+
+})();
+</script>
+</div>
+
+{% endblock %}

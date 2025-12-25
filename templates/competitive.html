@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}AI Competitive Interview Simulator{% endblock %}
+
+{% block content %}
+
+
+<div class="competitive-page">
+<div class="competitive-container">
+<section class="hero-minimal page-hero centered subtle-fade competitive-hero">
+  <div class="container-minimal hero-content competitive-hero-inner">
+    <div>
+      <div class="mode-pill">Competitive / UPSC / NDA / Job</div>
+      <h1 class="hero-title"> Competitive & Job Interview Room</h1>
+      <p class="hero-subtitle">
+        Sit across a virtual panel in a realistic interview room. AI panelists will ask
+        voice questions, listen to your answers, rate you, and give structured feedback.
+      </p>
+      <p class="hero-subtitle"> Scroll Down and start the interview Now!</p>
+    </div>
+    <div class="cta-group">
+        <a class="btn-minimal btn-primary-minimal" href="/">Back to home</a>
+</div>
+  </div>
+</section>
+
+<div class="container-minimal card-animated"
+     style="margin-top:18px; display:grid; grid-template-columns: minmax(0,1.4fr) minmax(280px,0.9fr); gap:20px;">
+  <!-- LEFT: Main Interview Console -->
+  <div>
+    <div class="form-row-minimal" style="gap:8px; display:flex; flex-wrap:wrap; align-items:flex-end;">
+      <div style="min-width:180px;">
+        <label class="small-label">Track</label>
+        <select id="cmpTrack" class="form-select-minimal">
+          <option value="UPSC Civil Services (IAS / IPS)">UPSC Civil Services (IAS / IPS)</option>
+          <option value="NDA / SSB Interview">NDA / SSB Interview</option>
+          <option value="Engineering / Tech Job Interview">Engineering / Tech Job Interview</option>
+          <option value="Non-Tech / HR Job Interview">Non-Tech / HR Job Interview</option>
+          <option value="Campus Placement">Campus Placement</option>
+          <option value="MBA / Group Discussion">MBA / Group Discussion</option>
+        </select>
+      </div>
+
+      <div style="min-width:200px; flex:1;">
+        <label class="small-label">Role / Post (optional)</label>
+        <input id="cmpRole" class="form-input-minimal" placeholder="e.g. IAS officer, Software Engineer, NDA cadet">
+      </div>
+
+      <div>
+        <label class="small-label">Difficulty</label>
+        <select id="cmpDifficulty" class="form-select-minimal">
+          <option value="easy">Warm-up</option>
+          <option value="standard" selected>Standard</option>
+          <option value="tough">Tough grilling</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="small-label">Language</label>
+        <select id="cmpLanguage" class="form-select-minimal">
+          <option value="English" selected>English</option>
+          <option value="Hindi">Hindi</option>
+          <option value="Hinglish">Hinglish mix</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="small-label">Questions</label>
+        <select id="cmpQCount" class="form-select-minimal">
+          <option value="3">3 Qs</option>
+          <option value="5" selected>5 Qs</option>
+          <option value="8">8 Qs</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="margin-top:14px; display:flex; gap:10px; align-items:center;">
+      <button id="cmpStartBtn" class="btn-minimal btn-primary-minimal btn-large">Start Interview</button>
+      <button id="cmpDownloadBtn" class="btn-minimal btn-secondary-minimal">Download Session PDF</button>
+
+      <div id="cmpSessionStatus" style="margin-left:auto; font-size:13px; color:#9fb3ff;">
+        Panel idle.
+      </div>
+    </div>
+
+    <hr style="margin:18px 0">
+
+    <h3>Panel Question</h3>
+    <div id="cmpQuestion" class="form-input-minimal"
+         style="min-height:80px; white-space:pre-wrap; word-wrap:break-word;"></div>
+
+    <h3>Your Answer</h3>
+    <div id="cmpAnswer" class="form-input-minimal"
+         style="min-height:80px; white-space:pre-wrap; word-wrap:break-word;"></div>
+
+    <h3>Feedback</h3>
+    <div id="cmpFeedback" class="form-input-minimal"
+         style="min-height:96px; white-space:pre-wrap; word-wrap:break-word;"></div>
+
+    <div style="margin-top:12px; display:flex; gap:12px; align-items:center;">
+      <div id="cmpStars"></div>
+      <div id="cmpScoreLine" style="font-size:13px; color:#e0e0e0;"></div>
+      <div id="cmpProgress" style="margin-left:auto; color:#9aa0ff; font-size:13px;"></div>
+    </div>
+
+    <div style="margin-top:18px;">
+      <canvas id="cmpMiniChart" width="560" height="150"></canvas>
+    </div>
+  </div>
+
+  <!-- RIGHT: Panel & Room Feel -->
+  <aside class="cmp-panel-aside">
+    <h4>Interview Panel</h4>
+    <div class="cmp-panel-card">
+      <div class="cmp-panel-row">
+        <div>
+          <div class="panel-name">Chairperson</div>
+          <div id="cmpChairStatus" class="panel-status">Waiting to start.</div>
+        </div>
+        <div class="panel-dot online"></div>
+      </div>
+    </div>
+
+    <div class="cmp-panel-card">
+      <div class="cmp-panel-row">
+        <div>
+          <div class="panel-name">Subject Expert</div>
+          <div id="cmpSubjectStatus" class="panel-status">Will test your domain depth.</div>
+        </div>
+        <div class="panel-dot idle"></div>
+      </div>
+    </div>
+
+    <div class="cmp-panel-card">
+      <div class="cmp-panel-row">
+        <div>
+          <div class="panel-name">HR / Psychologist</div>
+          <div id="cmpHRStatus" class="panel-status">Watching body language & confidence.</div>
+        </div>
+        <div class="panel-dot idle"></div>
+      </div>
+    </div>
+
+    <h5 style="margin-top:14px;">Room Tips</h5>
+    <ul class="cmp-tips">
+      <li>Sit upright, imagine the panel in front of you.</li>
+      <li>Answer in 3–4 clear points, not one long paragraph.</li>
+      <li>Use examples from your real life, not memorised lines.</li>
+      <li>Pause for half a second before answering tough questions.</li>
+    </ul>
+  </aside>
+</div>
+
+
+
+<!-- Confetti canvas -->
+<canvas id="cmpConfettiCanvas"
+        style="position:fixed;z-index: 10; inset:0; pointer-events:none; display:none; z-index:2500;"></canvas>
+  </div>
+</div>
+
+{% endblock %}
+

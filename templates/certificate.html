@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="certificate-page">
+
+  <div class="certificate-card" id="certificate" style="margin-top: 150px;">
+
+    <div class="certificate-content">
+
+      <h1 class="cert-title">CERTIFICATE OF ACHIEVEMENT</h1>
+
+      <p class="cert-line">This is proudly presented to</p>
+
+      <h2 class="cert-name">{{ user.name }}</h2>
+
+      <p class="cert-line">
+        for the successful completion of the prestigious program
+      </p>
+
+      <h3 class="cert-course">“{{ course.title }}”</h3>
+
+      <p class="cert-desc">
+        Demonstrating exceptional dedication, intellectual discipline,
+        and mastery of essential competencies. This certification stands
+        as a testament to excellence, perseverance, and commitment to
+        lifelong learning.
+      </p>
+
+      <p class="cert-issued">Issued by <b>IntervuVerse</b></p>
+
+      <!-- SIGNATURES -->
+      <div class="signatures">
+
+        <div class="sign">
+          <img src="/uploads/signatures/creator1.png">
+          <span>Founder</span>
+        </div>
+
+        <div class="sign">
+          <img src="/uploads/signatures/creator2.png">
+          <span>Director</span>
+        </div>
+
+        <div class="sign">
+          <img src="/uploads/signatures/creator3.png">
+          <span>Academic Head</span>
+        </div>
+
+
+        <div class="sign">
+          <img src="/uploads/signatures/sponsor.png">
+          <span>Sponsored By</span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="cert-actions">
+    <button onclick="downloadPDF()" class="btn-minimal2">
+      ⬇ Download Certificate
+    </button>
+  </div>
+
+</div>
+
+<script>
+function downloadPDF() {
+  window.print();
+}
+</script>
+
+{% endblock %}

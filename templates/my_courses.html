@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="home-container">
+<h2 class="hero-title" style="margin-top:150px; margin-left: 50px;"> My Courses</h2>
+
+{% for c in courses %}
+<div class="hover-box">
+  <h3>{{ c.title }}</h3>
+
+  <p style="font-size:20px;">
+    📘 {{ c.completed_lessons }} / {{ c.total_lessons }} lessons completed
+  </p>
+
+  {% if c.completed_lessons == c.total_lessons and c.total_lessons > 0 %}
+    <span class="badge-success">✅ Course Completed</span>
+    <br>
+    <a href="/certificate/{{ c.id }}" class="btn-minimal2" style="border: 2px solid; color: aliceblue; margin-top: 10px;">
+      Download Certificate
+    </a>
+  {% endif %}
+
+  <a href="/skills/course/{{ c.id }}" class="btn-minimal2" style="border: 2px solid; color: aliceblue; margin-top: 10px;">
+    Continue Learning
+  </a>
+</div>
+{% endfor %}
+</div>
+
+{% endblock %}

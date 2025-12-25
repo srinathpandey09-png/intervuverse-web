@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+
+<div class="home-page">
+  <div class="home-container">
+<section class="hero-minimal">
+  
+  <div class="container-minimal hero-content centered subtle-fade">
+    <h1 class="hero-title">IntervuVerse </h1>
+    {% if g.user and g.user.role == 'admin' %}
+          <a href="/admin/dashboard" class="admin-card danger1" style="margin-top: 150px;">ADMIN</a>
+        {% endif %}
+    <h2 class="hero-title"> The Universal AI Interview & Communication Trainer</h2>
+    <p class="hero-subtitle">
+      From Nursery Admissions to UPSC Interviews – one platform that prepares you to speak your best.
+    </p>
+
+        
+       
+
+    {% if g.user %}
+      <div class="cta-group">
+    <a class="btn-minimal3 module-color-dark" href="/dashboard">
+        <h2>Your Dashboard</h2>
+        <p>Review progress & manage your profile</p>
+    </a>
+    
+    <a class="btn-minimal3 module-color-purple" href="/viva">
+        <h2>Viva Simulator  </h2>
+        <p>CBSE, IGCSE, State Board Orals</p>
+    </a>
+    
+    <a class="btn-minimal3 module-color-yellow" href="/kids">
+        <h2>Kids Mode </h2>
+        <p>Nursery, LKG, UKG Interactive Test</p>
+    </a>
+    
+    <a class="btn-minimal3 module-color-bright-purple" href="/communication">
+        <h2>Communication Trainer </h2>
+        <p>Fluency, Pronunciation & Confidence</p>
+    </a>
+    
+    <a class="btn-minimal3 module-color-red" href="/competitive">
+        <h2>Competitive Trainer</h2>
+        <p>UPSC, NDA, SSC CGL, Corporate HR</p>
+    </a>
+
+    <a class="btn-minimal3 module-color-teal" href="/resume">
+        <h2>Resume Analyzer</h2>
+        <p>Personalized interview prep</p>
+    </a>
+</div>
+      {% else %}
+      <div class="cta-group">
+        <a class="btn-minimal btn-primary-minimal" href="/login">Join the Revolution</a>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+
+
+<section class="feature-section container-minimal centered subtle-fade">
+  <h2 class="feature-headline">All-in-one voice interview trainer</h2>
+  <p class="feature-description">
+    Choose a mode and the AI will ask spoken questions, listen to your answers,
+    and give detiled voice feedback.
+  </p>
+</section>
+  </div>
+</div>
+{% endblock %}

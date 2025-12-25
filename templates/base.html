@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>IntervuVerse - {% block title %}{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/static/css/style.css">
+
+  <style>
+    .centered { text-align:center; }
+    .page-hero { padding:80px 0 40px; }
+    .card-animated { transition: transform 0.35s ease, box-shadow 0.35s ease; }
+    .card-animated:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 30px 80px rgba(0,0,0,0.6); }
+    .kid-avatar { width:120px; height:120px; border-radius:50%; background: linear-gradient(135deg,#ffd6a5,#fdffb6); display:inline-flex; align-items:center; justify-content:center; font-weight:700; color:#1a1a1a; font-size:32px; box-shadow: 0 8px 32px rgba(0,0,0,0.2); }
+    .school-banner { padding:12px 20px; border-radius:12px; background: linear-gradient(90deg,#e0f2fe,#fef3c7); color:#0f172a; display:inline-block; font-weight:700; }
+    .subtle-fade { animation: fadeIn 0.8s ease both; }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(6px)} to { opacity:1; transform: translateY(0)} }
+  </style>
+
+  {% block head_extras %}{% endblock %}
+</head>
+
+<body>
+  <nav class="navbar-minimal">
+    <div class="container-minimal">
+
+      <!-- LOGO -->
+      <div class="logo-container">
+        <img src="/static/images/logo.png" alt="logo" class="navbar-logo-img">
+        <div class="logo-minimal">IntervuVerse</div>
+      </div>
+
+      <!-- NAV LINKS -->
+      <ul class="nav-links-minimal">
+        <li><a href="/">Home</a></li>
+        <li><a href="/experience">User Experience</a></li>
+        
+
+{% if g.user and g.user.role == 'instructor' %}
+<li><a href="/instructor/dashboard">Instructor</a></li>
+{% endif %}
+
+{% if g.user and g.user.role == 'admin' %}
+<li><a href="/admin/skills/courses">Admin Skills</a></li>
+{% endif %}
+
+        {% if g.user %}
+          
+          <li><a href="/skills">Skill Programs</a></li>
+          <a href="/announcements">Announcements</a>
+           <a href="/my_courses">My Courses</a>
+          <a href="/about">Creators & Feedback</a>
+           <li><a href="/leaderboard">Leaderboard</a></li>
+           <li><a href="/settings">Settings</a></li>
+
+        {% else %}
+         
+        {% endif %}
+
+       
+      </ul>
+
+      <!-- USER ACCOUNT AREA -->
+      <div class="user-profile">
+        {% if g.user %}
+         <div class="user-badge">
+    <img src="{{ g.user.photo or '/static/images/default_avatar.png' }}" class="nav-avatar">
+    {{ g.user.name }}
+</div>
+
+          <a class="nav-btn" href="/profile">Profile</a>
+          <a class="logout-btn" href="/logout">Logout</a>
+        {% else %}
+          <div class="user-badge">Guest</div>
+          <a class="logout-btn" href="/login">Login</a>
+        {% endif %}
+      </div>
+
+    </div>
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="footer-minimal">
+    <p><strong>About IntervuVerse:</strong></p>
+    <p>IntervuVerse democratizes high-quality communication training by offering a universal, AI-powered platform.</p>
+    <p>AI Model: Gemini 2.5 Flash</p>
+    <p>© 2025 IntervuCore Team. All Rights Reserved.</p>
+  </footer>
+
+  {% block scripts %}
+  <script src="/static/js/voice.js"></script>
+  {% endblock %}
+</body>
+</html>
